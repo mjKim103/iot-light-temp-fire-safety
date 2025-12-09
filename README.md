@@ -35,15 +35,14 @@
 본 시스템은 두 가지 위험 요소가 동시에 충족될 때만 화재로 판단하여 **오탐률을 최소화**합니다.
 
 $$
-\text{IF } (\text{Temperature} > T_{\text{threshold}}) \quad \text{AND} \quad (\text{Light\_Change} > L_{\text{threshold}}) \\
-\rightarrow \text{Fire} = \text{TRUE} \\
-\rightarrow \text{Piezo Buzzer ON}
+\text{IF } \bigl(T > T_{\text{th}}\bigr) \;\land\; \bigl(\Delta L > L_{\text{th}}\bigr)
+\;\Rightarrow\; \text{Fire} = \text{TRUE} \;\Rightarrow\; \text{Piezo Buzzer ON}
 $$
 
-* $T_{\text{threshold}}$: 설정된 **온도 임계값** (예: $30^\circ\text{C}$)
-* $L_{\text{threshold}}$: 설정된 **조도 변화 임계값** (직전 값 대비 변화량)
+* $T_{\text{th}}$: 설정된 **온도 임계값** (예: $30^\circ\text{C}$)  
+* $L_{\text{th}}$: 설정된 **조도 변화 임계값** (직전 값 대비 변화량)
 
----
+
 ### 🛠 5. 회로 연결 (Wiring Diagram)
 
 | 센서/부품 | Arduino 핀 | 비고 |
