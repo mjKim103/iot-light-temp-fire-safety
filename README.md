@@ -50,7 +50,6 @@ $$
 | :--- | :--- | :--- |
 | **LDR** | **A0** (아날로그 0) | 풀다운(Pull-down) 저항($10\text{k}\Omega$) 구성: $5\text{V} \rightarrow \text{LDR} \rightarrow \text{A0} \rightarrow 10\text{k}\Omega \rightarrow \text{GND}$ |
 | **DHT11 Data** | **D2** (디지털 2) | VCC $\rightarrow 5\text{V}$, GND $\rightarrow \text{GND}$ |
-| **Piezo Buzzer (+)** | **D8** (디지털 8) | $\text{Buzzer}(-) \rightarrow \text{GND}$ |
 
 -----
 
