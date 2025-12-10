@@ -25,7 +25,7 @@
 | :--- | :--- | :--- |
 | **온도 감지** | **DHT11 / LM35** | 주변 환경의 열(온도) 변화 감지 |
 | **밝기 감지** | **LDR (Light Dependent Resistor)** | 주변 환경의 밝기(조도) 변화 감지 |
-| **경보 출력** | **피에조 부저 (Piezo Buzzer)** | 화재 위험 시 경고 알람 출력 |
+| **경보 출력** | 화재 위험 시 경고 알람 출력 |
 | **제어 보드** | **Arduino UNO** | 센서 데이터 처리 및 로직 실행 |
 
 ---
@@ -59,70 +59,44 @@ $$
 > **주의:** 임계값 (`TEMP_THRESHOLD`, `LDR_CHANGE_THRESHOLD`)은 설치 환경에 따라 튜닝이 필요합니다.
 
 ```cpp
-#include <DHT.h>
-
-// 핀 설정
-#define DHTPIN 2
-#define DHTTYPE DHT11
-#define BUZZER_PIN 8
-#define LDR_PIN A0
-
-// 임계값 설정 (환경에 따라 튜닝 필요)
-// T_threshold: 설정된 온도 임계값 (예: 30.0 °C)
-const float TEMP_THRESHOLD = 30.0; 
-// L_threshold: 조도 변화 임계값 (직전 값 대비 변화량)
-const int LDR_CHANGE_THRESHOLD = 150; 
-
-DHT dht(DHTPIN, DHTTYPE);
-int previousLDRValue = 0; // 직전 조도 값 저장
+#include <math.h>
 
 void setup() {
   Serial.begin(9600);
-  // DHT 라이브러리 초기화
-  dht.begin();
-  // 부저 핀 출력 설정
-  pinMode(BUZZER_PIN, OUTPUT);
-  // 초기 조도 값 설정
-  previousLDRValue = analogRead(LDR_PIN);
+  // 시작음
+  tone(4, 523, 500); // 도
+  delay(600);
+  tone(4, 987, 500); // 시
+  delay(600);
+}
+
+double th(int v) {
+  double t;
+  t = log(((10240000.0 / v) - 10000.0));
+  t = 1.0 /(0.001129148 + (0.000234125*t) + (0.0000000876741*t*t*t));
+  t = t - 273.15; // 켈빈 -> 섭씨
+  return t;
 }
 
 void loop() {
-  // 온도 측정
-  float temp = dht.readTemperature();
+  int a = analogRead(A0);  // 조도
+  int s = analogRead(A2);  // 온도용 서미스터값
+  double tempC = th(s);
 
-  // 조도 측정
-  int currentLDRValue = analogRead(LDR_PIN);
-  // 조도 변화량 계산: 절대값 사용
-  int ldrChange = abs(currentLDRValue - previousLDRValue); 
+  // 1) 시리얼 모니터용(있어도 상관 없음)
+  Serial.print("LDR: ");
+  Serial.print(a);
+  Serial.print("  Temp: ");
+  Serial.println(tempC);
 
-  // 데이터 출력 (모니터링)
-  if (isnan(temp)) {
-    Serial.println("Failed to read from DHT sensor!");
-  } else {
-    Serial.print("Temp: "); Serial.print(temp); Serial.print(" °C | LDR: "); Serial.print(currentLDRValue);
-    Serial.print(" | LDR Change: "); Serial.println(ldrChange);
-  }
+  // 2) Processing에서 파싱하기 좋은 CSV 한 줄
+  Serial.print(a);
+  Serial.print(",");
+  Serial.println(tempC);
 
-
-  // --- 화재 판단 로직 ---
-  // 온도 임계값 초과 AND 조도 변화 임계값 초과 시
-  if (temp > TEMP_THRESHOLD && ldrChange > LDR_CHANGE_THRESHOLD) {
-    // 화재 위험 감지
-    Serial.println("!!! FIRE DETECTED !!!");
-    digitalWrite(BUZZER_PIN, HIGH); // 부저 ON
-    // 경보 지속 시간 (예: 1초)
-    delay(1000); 
-  } else {
-    // 정상 모니터링
-    digitalWrite(BUZZER_PIN, LOW); // 부저 OFF
-  }
-  
-  // 현재 조도 값을 다음 루프의 이전 값으로 저장
-  previousLDRValue = currentLDRValue;
-  
-  // 모니터링 간격
-  delay(2000); 
+  delay(500);
 }
+
 ```
 
 -----
