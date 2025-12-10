@@ -36,7 +36,7 @@
 
 $$
 \text{IF } \bigl(T > T_{\text{th}}\bigr) \;\land\; \bigl(\Delta L > L_{\text{th}}\bigr)
-\;\Rightarrow\; \text{Fire} = \text{TRUE} \;\Rightarrow\; \text{Piezo Buzzer ON}
+\;\Rightarrow\; \text{Fire} = \text{TRUE} \;\Rightarrow\; \text{Buzzer ON}
 $$
 
 * $T_{\text{th}}$: 설정된 **온도 임계값** (예: $30^\circ\text{C}$)  
