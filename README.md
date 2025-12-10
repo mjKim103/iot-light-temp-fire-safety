@@ -39,8 +39,8 @@ $$
 \;\Rightarrow\; \text{Fire} = \text{TRUE} \;\Rightarrow\; \text{Buzzer ON}
 $$
 
-* $T_{\text{th}}$: 설정된 **온도 임계값** (예: $30^\circ\text{C}$)  
-* $L_{\text{th}}$: 설정된 **조도 변화 임계값** (직전 값 대비 변화량)
+* $T_{\text{th}}$: 30도 이상
+* $L_{\text{th}}$: 조도 변화 80 이상
 
 ---
 
